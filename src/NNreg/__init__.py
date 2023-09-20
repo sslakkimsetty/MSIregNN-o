@@ -2,4 +2,9 @@
 
 """A python package to co-register mass spectrometry images (MSI)."""
 
-from .api import *  # noqa
+from DLIR import *
+from mi import *
+from stn import *
+from stn_affine import *
+from stn_bspline import *
+from .msiData import *
