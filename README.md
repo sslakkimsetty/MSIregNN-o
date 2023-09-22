@@ -53,7 +53,7 @@ The most recent release can be installed from
 [PyPI](https://pypi.org/project/NNreg/) with:
 
 ```shell
-$ pip install NNreg
+$ pip install MSIregNN
 ```
 -->
 

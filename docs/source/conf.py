@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.abspath("../../src"))
 
 # -- Project information -----------------------------------------------------
 
-project = "NNreg"
+project = "MSIregNN"
 copyright = f"{date.today().year}, Sai Srikanth Lakkimsetty"
 author = "Sai Srikanth Lakkimsetty"
 
@@ -50,7 +50,7 @@ if parsed_version.group("release"):
 add_module_names = False
 
 # A list of prefixes that are ignored when creating the module index. (new in Sphinx 0.6)
-modindex_common_prefix = ["NNreg."]
+modindex_common_prefix = ["MSIregNN."]
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -166,7 +166,7 @@ htmlhelp_basename = "NNreg_doc"
 # latex_documents = [
 #     (
 #         master_doc,
-#         'NNreg.tex',
+#         'MSIregNN.tex',
 #         'MSIregNN Documentation',
 #         author,
 #         'manual',
@@ -180,7 +180,7 @@ htmlhelp_basename = "NNreg_doc"
 man_pages = [
     (
         master_doc,
-        "NNreg",
+        "MSIregNN",
         "MSIregNN Documentation",
         [author],
         1,
@@ -195,7 +195,7 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "NNreg",
+        "MSIregNN",
         "MSIregNN Documentation",
         author,
         "Sai Srikanth Lakkimsetty",

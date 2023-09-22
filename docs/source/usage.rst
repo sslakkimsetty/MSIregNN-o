@@ -1,14 +1,14 @@
 Usage
 =====
-.. automodule:: NNreg.mi
+.. automodule:: MSIregNN.mi
     :members:
-.. automodule:: NNreg.stn
+.. automodule:: MSIregNN.stn
     :members:
-.. automodule:: NNreg.stn_affine
+.. automodule:: MSIregNN.stn_affine
     :members:
-.. automodule:: NNreg.stn_bspline
+.. automodule:: MSIregNN.stn_bspline
     :members:
-.. automodule:: NNreg.DLIR
+.. automodule:: MSIregNN.DLIR
     :members:
-.. automodule:: NNreg.msiData
+.. automodule:: MSIregNN.msiData
     :members:

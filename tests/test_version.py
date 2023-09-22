@@ -4,7 +4,7 @@
 
 import unittest
 
-from NNreg.version import get_version
+from MSIregNN.version import get_version
 
 
 class TestVersion(unittest.TestCase):
