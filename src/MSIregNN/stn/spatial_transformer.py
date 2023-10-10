@@ -3,7 +3,6 @@ import numpy as np
 
 
 def spatial_transformer(input_fmap, theta=None, out_dims=None, **kwargs):
-    # change
 
     # Input dimensions
     DIM = len(input_fmap.shape)
