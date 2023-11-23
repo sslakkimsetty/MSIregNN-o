@@ -7,6 +7,7 @@ from ..stn_bspline import SpatialTransformerBspline
 
 
 
+
 class Linear(layers.Layer):
 
     def __init__(self, units=32, input_dim=32,
@@ -114,5 +115,37 @@ class DLIR(tf.keras.models.Model):
         xt = self.transformer(inputs, theta, self.B)
         return xt
 
+
+class BSplineRegistration(tf.keras.models.Model):
+
+    def __init__(self, img_res, factor=1):
+        super(BSplineRegistration, self).__init__()
+        self.B = 1
+        self.img_res = img_res
+        self.loc_net = LocNet()
+
+        _test_arr = np.ones((1, img_res[0], img_res[1], 1)).astype(np.float32)
+        _test_arr = self.loc_net(_test_arr)
+        self.grid_res = _test_arr.numpy().squeeze().shape
+        self.grid_res = [self.grid_res[0], self.grid_res[1]]
+        print("Grid res:", self.grid_res)
+
+        self.transformer_regressor = TransformationRegressor(theta_units=self.grid_res[0] * self.grid_res[1] * 2,
+                                                             input_dim=factor)
+        self.grid_res = [self.grid_res[0] * np.sqrt(factor).astype(np.int32),
+                         self.grid_res[1] * np.sqrt(factor).astype(np.int32)]
+        self.transformer = SpatialTransformerBspline(img_res=img_res,
+                                                     grid_res=self.grid_res,
+                                                     out_dims=img_res,
+                                                     B=self.B)
+
+    def call(self, moving):
+        xs = moving
+        xs = self.loc_net(xs)
+        xs = tf.transpose(xs, [0, 3, 1, 2])
+        theta = self.transformer_regressor(xs)
+        theta = tf.reshape(theta, (self.B, 2, self.grid_res[0], self.grid_res[1]))
+        xt = self.transformer(moving, theta, self.B)
+        return xt, theta
 
 
