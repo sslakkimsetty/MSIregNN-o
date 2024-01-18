@@ -13,21 +13,25 @@ class Linear(layers.Layer):
     This layer performs a linear transformation on the input data using weights (w) and biases (b).
     The transformation is defined as: output = inputs * w + b.
 
-    Parameters:
-    - units (int): Number of output units/neurons in the layer.
-    - input_dim (int): Dimensionality of the input data.
-    - is_transformer_regressor (bool): If True, initializes weights with zeros and uses a trainable bias based on a
-                                       transformer regressor approach. If False, initializes weights with random values
-                                       and uses a trainable bias initialized with zeros.
+    :param units: Number of output units/neurons in the layer.
+    :type units: int
 
-    Attributes:
-    - w (tf.Variable): Weight matrix for the linear transformation.
-    - b (tf.Variable): Bias vector for the linear transformation.
+    :param input_dim: Dimensionality of the input data.
+    :type input_dim: int
 
-    Methods:
-    - call(inputs): Performs the linear transformation on the input data.
+    :param is_transformer_regressor: If True, initializes weights with zeros and uses a trainable bias based on a
+                                     transformer regressor approach. If False, initializes weights with random values
+                                     and uses a trainable bias initialized with zeros.
+    :type is_transformer_regressor: bool
 
-    Example usage:
+    :Attributes:
+        - w (tf.Variable): Weight matrix for the linear transformation.
+        - b (tf.Variable): Bias vector for the linear transformation.
+
+    :Methods:
+        - call(inputs): Performs the linear transformation on the input data.
+
+    :Example usage:
     ```python
     linear_layer = Linear(units=64, input_dim=128, is_transformer_regressor=False)
     output_data = linear_layer.call(input_data)
@@ -58,11 +62,11 @@ class Linear(layers.Layer):
         """
         Apply the linear transformation on the input data.
 
-        Parameters:
-        - inputs (tf.Tensor): Input data tensor.
+        :param inputs: Input data tensor.
+        :type inputs: tf.Tensor
 
-        Returns:
-        - tf.Tensor: Output tensor after the linear transformation.
+        :return: Output tensor after the linear transformation.
+        :rtype: tf.Tensor
         """
         return tf.matmul(inputs, self.w) + self.b
 
@@ -73,16 +77,16 @@ class LocNet(tf.keras.layers.Layer):
 
     This layer consists of two convolutional blocks followed by max-pooling operations.
 
-    Attributes:
-    - conv1 (Conv2D): First convolutional layer with 8 filters and a kernel size of 7x7, using ReLU activation.
-    - maxpool1 (MaxPooling2D): First max-pooling layer with a pool size of 2x2 and strides of 2.
-    - conv2 (Conv2D): Second convolutional layer with 10 filters and a kernel size of 5x5, using ReLU activation.
-    - maxpool2 (MaxPooling2D): Second max-pooling layer with a pool size of 2x2 and strides of 2.
+    :Attributes:
+        - conv1 (Conv2D): First convolutional layer with 8 filters and a kernel size of 7x7, using ReLU activation.
+        - maxpool1 (MaxPooling2D): First max-pooling layer with a pool size of 2x2 and strides of 2.
+        - conv2 (Conv2D): Second convolutional layer with 10 filters and a kernel size of 5x5, using ReLU activation.
+        - maxpool2 (MaxPooling2D): Second max-pooling layer with a pool size of 2x2 and strides of 2.
 
-    Methods:
-    - call(inputs): Applies the LocNet layer on the input data.
+    :Methods:
+        - call(inputs): Applies the LocNet layer on the input data.
 
-    Example usage:
+    :Example usage:
     ```python
     locnet_layer = LocNet()
     input_data = tf.random.normal(shape=(batch_size, height, width, channels))
@@ -104,11 +108,11 @@ class LocNet(tf.keras.layers.Layer):
         """
         Apply the LocNet layer on the input data to extract spatial features.
 
-        Parameters:
-        - inputs (tf.Tensor): Input data tensor with shape (batch_size, height, width, channels).
+        :param inputs: Input data tensor with shape (batch_size, height, width, channels).
+        :type inputs: tf.Tensor
 
-        Returns:
-        - tf.Tensor: Output tensor representing the spatial features extracted by the LocNet layer.
+        :return: Output tensor representing the spatial features extracted by the LocNet layer.
+        :rtype: tf.Tensor
         """
         x = self.conv1(inputs)
         x = self.maxpool1(x)
@@ -124,21 +128,25 @@ class TransformationRegressor(tf.keras.layers.Layer):
     This layer is designed to predict transformation parameters, such as rotation or translation, from input data.
     It consists of two linear layers with optional activation functions.
 
-    Parameters:
-    - theta_units (int): Number of units in the intermediate layer used for predicting transformation parameters.
-    - input_dim (int): Dimensionality of the input data. If None, it will be inferred during the first forward pass.
-    - theta_copy (bool): If True, reuse the transformation parameters (theta) from an external source.
+    :param theta_units: Number of units in the intermediate layer used for predicting transformation parameters.
+    :type theta_units: int
 
-    Attributes:
-    - linear1 (Linear): First linear layer with units=theta_units*5, responsible for extracting features from the input.
-    - linear2 (Linear): Second linear layer with units=theta_units, specifically designed for predicting transformation
-                        parameters.
-                        If is_transformer_regressor is True, it uses a custom initialization for transformer regression.
+    :param input_dim: Dimensionality of the input data. If None, it will be inferred during the first forward pass.
+    :type input_dim: int or None
 
-    Methods:
-    - call(inputs): Applies the Transformation Regressor layer on the input data to predict transformation parameters.
+    :param theta_copy: If True, reuse the transformation parameters (theta) from an external source.
+    :type theta_copy: bool or None
 
-    Example usage:
+    :Attributes:
+        - linear1 (Linear): First linear layer with units=theta_units*5, responsible for extracting features from the input.
+        - linear2 (Linear): Second linear layer with units=theta_units, specifically designed for predicting transformation
+                            parameters.
+                            If is_transformer_regressor is True, it uses a custom initialization for transformer regression.
+
+    :Methods:
+        - call(inputs): Applies the Transformation Regressor layer on the input data to predict transformation parameters.
+
+    :Example usage:
     ```python
     regressor_layer = TransformationRegressor(theta_units=6, input_dim=10)
     input_data = tf.random.normal(shape=(batch_size, input_dim))
@@ -164,11 +172,11 @@ class TransformationRegressor(tf.keras.layers.Layer):
         """
         Apply the Transformation Regressor layer on the input data to predict transformation parameters.
 
-        Parameters:
-        - inputs (tf.Tensor): Input data tensor with shape (batch_size, input_dim).
+        :param inputs: Input data tensor with shape (batch_size, input_dim).
+        :type inputs: tf.Tensor
 
-        Returns:
-        - tf.Tensor: Output tensor representing the predicted transformation parameters.
+        :return: Output tensor representing the predicted transformation parameters.
+        :rtype: tf.Tensor
         """
         x = self.linear1(inputs)
         x = tf.nn.tanh(x)
@@ -184,27 +192,33 @@ class DLIR(tf.keras.models.Model):
     This model combines a localization network (LocNet), a spatial transformer module (SpatialTransformerBspline),
     and a transformation regressor to enable spatial transformations on input images.
 
-    Parameters:
-    - drate (float): Dropout rate for regularization.
-    - grid_res (tuple): Resolution of the transformation grid (sx, sy).
-    - img_res (tuple): Resolution of the input image (H, W).
-    - input_dim (int): Dimensionality of the input data.
+    :param drate: Dropout rate for regularization.
+    :type drate: float
 
-    Attributes:
-    - grid_res (tuple): Resolution of the transformation grid (sx, sy).
-    - img_res (tuple): Resolution of the input image (H, W).
-    - drate (float): Dropout rate for regularization.
-    - B (int): Spline basis degree.
-    - loc_net (LocNet): Localization network for spatial feature extraction.
-    - flatten (Flatten): Flatten layer for transforming spatial features into a 1D vector.
-    - transformer (SpatialTransformerBspline): Spatial transformer module for image transformation.
-    - transformer_regressor (TransformationRegressor): Regressor for predicting transformation parameters.
+    :param grid_res: Resolution of the transformation grid (sx, sy).
+    :type grid_res: tuple
 
-    Methods:
-    - call(inputs): Applies the DLIR model on the input data to perform spatial transformations.
-    - transform(inputs): Applies the DLIR model to perform spatial transformations without dropout.
+    :param img_res: Resolution of the input image (H, W).
+    :type img_res: tuple
 
-    Example usage:
+    :param input_dim: Dimensionality of the input data.
+    :type input_dim: int
+
+    :Attributes:
+        - grid_res (tuple): Resolution of the transformation grid (sx, sy).
+        - img_res (tuple): Resolution of the input image (H, W).
+        - drate (float): Dropout rate for regularization.
+        - B (int): Spline basis degree.
+        - loc_net (LocNet): Localization network for spatial feature extraction.
+        - flatten (Flatten): Flatten layer for transforming spatial features into a 1D vector.
+        - transformer (SpatialTransformerBspline): Spatial transformer module for image transformation.
+        - transformer_regressor (TransformationRegressor): Regressor for predicting transformation parameters.
+
+    :Methods:
+        - call(inputs): Applies the DLIR model on the input data to perform spatial transformations.
+        - transform(inputs): Applies the DLIR model to perform spatial transformations without dropout.
+
+    :Example usage:
     ```python
     dlir_model = DLIR(drate=0.2, grid_res=(5, 5), img_res=(256, 256), input_dim=512)
     input_data = tf.random.normal(shape=(batch_size, 256, 256, 3))
@@ -238,11 +252,11 @@ class DLIR(tf.keras.models.Model):
         """
         Apply the DLIR model on the input data to perform spatial transformations.
 
-        Parameters:
-        - inputs (tf.Tensor): Input data tensor with shape (batch_size, H, W, channels).
+        :param inputs: Input data tensor with shape (batch_size, H, W, channels).
+        :type inputs: tf.Tensor
 
-        Returns:
-        - tf.Tensor: Transformed output tensor.
+        :return: Transformed output tensor.
+        :rtype: tf.Tensor
         """
         xs = self.loc_net(inputs)
         xs = self.flatten(xs)
@@ -255,11 +269,11 @@ class DLIR(tf.keras.models.Model):
         """
         Apply the DLIR model to perform spatial transformations without dropout.
 
-        Parameters:
-        - inputs (tf.Tensor): Input data tensor with shape (batch_size, H, W, channels).
+        :param inputs: Input data tensor with shape (batch_size, H, W, channels).
+        :type inputs: tf.Tensor
 
-        Returns:
-        - tf.Tensor: Transformed output tensor.
+        :return: Transformed output tensor.
+        :rtype: tf.Tensor
         """
         # inputs = inputs.astype("float32")
         inputs = tf.cast(inputs, "float32")
@@ -278,22 +292,24 @@ class BSplineRegistration(tf.keras.models.Model):
     (SpatialTransformerBspline), and a transformation regressor for predicting B-spline transformation parameters.
     It is designed for non-linear image registration tasks.
 
-    Parameters:
-    - img_res (tuple): Resolution of the input images (H, W).
-    - factor (int): Upsampling factor for the grid resolution in the spatial transformer module.
+    :param img_res: Resolution of the input images (H, W).
+    :type img_res: tuple
 
-    Attributes:
-    - B (int): Spline basis degree.
-    - img_res (tuple): Resolution of the input images (H, W).
-    - loc_net (LocNet): Localization network for spatial feature extraction.
-    - grid_res (list): Resolution of the B-spline grid used in the spatial transformer module.
-    - transformer_regressor (TransformationRegressor): Regressor for predicting B-spline transformation parameters.
-    - transformer (SpatialTransformerBspline): Spatial transformer module using B-spline interpolation for image registration.
+    :param factor: Upsampling factor for the grid resolution in the spatial transformer module.
+    :type factor: int
 
-    Methods:
-    - call(moving): Applies the B-Spline Registration model on the moving image to perform non-linear image registration.
+    :Attributes:
+        - B (int): Spline basis degree.
+        - img_res (tuple): Resolution of the input images (H, W).
+        - loc_net (LocNet): Localization network for spatial feature extraction.
+        - grid_res (list): Resolution of the B-spline grid used in the spatial transformer module.
+        - transformer_regressor (TransformationRegressor): Regressor for predicting B-spline transformation parameters.
+        - transformer (SpatialTransformerBspline): Spatial transformer module using B-spline interpolation for image registration.
 
-    Example usage:
+    :Methods:
+        - call(moving): Applies the B-Spline Registration model on the moving image to perform non-linear image registration.
+
+    :Example usage:
     ```python
     bspline_model = BSplineRegistration(img_res=(256, 256), factor=2)
     moving_image = tf.random.normal(shape=(batch_size, 256, 256, 1))
@@ -327,12 +343,14 @@ class BSplineRegistration(tf.keras.models.Model):
         """
         Apply the B-Spline Registration model on the moving image for non-linear image registration.
 
-        Parameters:
-        - moving (tf.Tensor): Tensor representing the moving image with shape (batch_size, H, W, channels).
+        :param moving: Tensor representing the moving image with shape (batch_size, H, W, channels).
+        :type moving: tf.Tensor
 
-        Returns:
-        - tf.Tensor: Registered image tensor.
-        - tf.Tensor: B-spline transformation parameters.
+        :return: Registered image tensor.
+        :rtype: tf.Tensor
+
+        :return: B-spline transformation parameters.
+        :rtype: tf.Tensor
         """
         xs = moving
         xs = self.loc_net(xs)
