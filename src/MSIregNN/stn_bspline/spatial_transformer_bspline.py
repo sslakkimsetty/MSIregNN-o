@@ -2,6 +2,58 @@ import tensorflow as tf
 import numpy as np
 
 class SpatialTransformerBspline(tf.keras.layers.Layer):
+    """
+    Spatial Transformer B-spline layer for spatial transformations of input feature maps using B-spline transformations.
+
+    This layer applies spatial transformations on input feature maps based on B-spline transformation parameters.
+    It consists of a grid generator and a bilinear sampler for performing differentiable spatial transformations
+    using B-spline basis functions.
+
+    :Parameters:
+        - img_res (tuple): Resolution of the input images (H, W). Defaults to (100, 100) if not provided.
+        - grid_res (tuple): Resolution of the control grid points (nx, ny). Defaults to (ceil(W/7), ceil(H/7))
+                            if not provided.
+        - out_dims (tuple): Output dimensions of the transformed images (out_H, out_W). Defaults to img_res if not
+                            provided.
+        - B (int): Batch size. Defaults to None.
+
+    :Attributes:
+        - H (int): Height of the input images.
+        - W (int): Width of the input images.
+        - out_H (int): Height of the output images.
+        - out_W (int): Width of the output images.
+        - nx (int): Number of control points in the x-direction.
+        - ny (int): Number of control points in the y-direction.
+        - gx (tf.Tensor): Grid size in the x-direction.
+        - gy (tf.Tensor): Grid size in the y-direction.
+        - sx (tf.Tensor): Scaling factor in the x-direction.
+        - sy (tf.Tensor): Scaling factor in the y-direction.
+        - base_grid (tf.Tensor): Base grid for the grid generator.
+        - px (tf.Tensor): Base indices for B-spline basis functions in the x-direction.
+        - py (tf.Tensor): Base indices for B-spline basis functions in the y-direction.
+        - Buv (tf.Tensor): B-spline basis functions.
+
+    :Methods:
+        - _transformer(input_fmap, theta=None): Applies the spatial transformation on the input feature map.
+        - _grid_generator(theta=None): Generates the grid for B-spline transformation.
+        - _delta_calculator(b, px, py, theta): Computes the delta values for B-spline transformation.
+        - _compute_theta_slices(b, px, py, theta, i): Computes theta slices for B-spline transformation.
+        - _piece_bsplines(u): Computes piece-wise B-spline basis functions.
+        - _bilinear_sampler(img, x, y): Bilinear sampler for sampling values from the input feature map.
+        - _pixel_intensity(img, x, y): Retrieves pixel intensities from the input feature map.
+        - call(input_fmap, theta=None, B=None): Applies the spatial transformer B-spline layer on the input feature map.
+
+    :Example usage:
+    ```python
+    st_bspline_layer = SpatialTransformerBspline(img_res=(256, 256), grid_res=(32, 32), out_dims=(128, 128), B=32)
+    input_feature_map = tf.random.normal(shape=(32, 256, 256, 3))
+    theta_params = tf.random.normal(shape=(32, 2, 32, 32))  # Example B-spline transformation parameters
+    transformed_output, delta = st_bspline_layer.call(input_feature_map, theta=theta_params, B=32)
+    ```
+
+    :Note: This layer is designed to be used in neural network architectures for tasks involving spatial
+           transformations using B-spline functions.
+    """
 
     def __init__(self, img_res=None, grid_res=None, out_dims=None, B=None):
         super(SpatialTransformerBspline, self).__init__()
@@ -69,24 +121,20 @@ class SpatialTransformerBspline(tf.keras.layers.Layer):
 
     def _transformer(self, input_fmap, theta=None):
         """
-        Main transformer function that acts as a layer
-        in a neural network. It does two things.
-            1. Create a grid generator and transform the grid
-                as per the transformation parameters
-            2. Sample the input feature map using the transformed
-                grid co-ordinates
+        Applies the spatial transformation on the input feature map using Bspline transformations.
 
-        Args:
-            input_fmap: the input feature map; shape=(B, H, W, C)
-            theta:      transformation parameters; array of length
-                        corresponding to a fn of grid_res
-            out_dims:   dimensions of the output feature map (out_H, out_W)
-                        if not provided, input dims are copied
-            grid_res:   resolution of the control grid points (sx, sy)
+        This method transforms the input feature map based on the given Bspline transformation parameters (theta).
 
-        Returns:        output feature map of shape, out_dims
+        :Parameters:
+            - input_fmap (tf.Tensor): Input feature map with shape (B, H, W, C).
+            - theta (tf.Tensor): Bspline transformation parameters with shape (B, 2, ny, nx). Defaults to None.
+
+        :Returns:
+            - out_fmap (tf.Tensor): Transformed output feature map with shape (B, out_H, out_W, C).
+            - delta (tf.Tensor): Transformation deltas.
+
+        :Note: This method is used internally by the SpatialTransformerBspline layer.
         """
-
         B, H, W, C = input_fmap.shape
         if B == None:
             self.B = 1
@@ -112,8 +160,22 @@ class SpatialTransformerBspline(tf.keras.layers.Layer):
         out_fmap = self._bilinear_sampler(input_fmap, xs, ys) ##
         return out_fmap, delta
 
-
     def _grid_generator(self, theta=None):
+        """
+        Generates the control grid and computes transformation deltas based on Bspline transformation parameters.
+
+        This method generates the control grid based on the given Bspline transformation parameters (theta)
+        and computes the transformation deltas.
+
+        :Parameters:
+            - theta (tf.Tensor): Bspline transformation parameters with shape (B, 2, ny, nx). Defaults to None.
+
+        :Returns:
+            - batch_grids (tf.Tensor): Generated batch grids with shape (2, B, H, W).
+            - delta (tf.Tensor): Transformation deltas.
+
+        :Note: This method is used internally by the SpatialTransformerBspline layer.
+        """
         # theta shape B, 2, ny, nx
         theta_x = theta[:,0,:,:]
         theta_y = theta[:,1,:,:]
@@ -141,8 +203,23 @@ class SpatialTransformerBspline(tf.keras.layers.Layer):
         batch_grids = self.base_grid[:,:self.B] + delta
         return batch_grids, delta
 
-
     def _delta_calculator(self, b, px, py, theta):
+        """
+        Calculates Bspline transformation deltas for the control grid.
+
+        This method computes the Bspline transformation deltas for the given control grid points.
+
+        :Parameters:
+            - b (tf.Tensor): Batch indices.
+            - px (tf.Tensor): x-coordinates of control grid points.
+            - py (tf.Tensor): y-coordinates of control grid points.
+            - theta (tf.Tensor): Bspline transformation parameters.
+
+        :Returns:
+            - t (tf.Tensor): Bspline transformation deltas.
+
+        :Note: This method is used internally by the SpatialTransformerBspline layer.
+        """
         px = px[0:self.B]
         py = py[0:self.B]
 
@@ -154,18 +231,49 @@ class SpatialTransformerBspline(tf.keras.layers.Layer):
         t = tf.stack([t0,t1,t2,t3], axis=-1)
         return t
 
-
     def _compute_theta_slices(self, b, px, py, theta, i):
-        ti0 = tf.gather_nd(theta, tf.stack([b,py+i,px+0],3))
-        ti1 = tf.gather_nd(theta, tf.stack([b,py+i,px+1],3))
-        ti2 = tf.gather_nd(theta, tf.stack([b,py+i,px+2],3))
-        ti3 = tf.gather_nd(theta, tf.stack([b,py+i,px+3],3))
+        """
+        Computes slices of Bspline transformation parameters for the given control grid points.
 
-        ti = tf.stack([ti0,ti1,ti2,ti3], axis=-1)
+        This method extracts slices of Bspline transformation parameters corresponding to the specified
+        control grid points and interpolation indices.
+
+        :Parameters:
+            - b (tf.Tensor): Batch indices.
+            - px (tf.Tensor): x-coordinates of control grid points.
+            - py (tf.Tensor): y-coordinates of control grid points.
+            - theta (tf.Tensor): Bspline transformation parameters.
+            - i (int): Interpolation index.
+
+        :Returns:
+            - ti (tf.Tensor): Slices of Bspline transformation parameters.
+
+        :Note: This method is used internally by the SpatialTransformerBspline layer.
+        """
+        ti0 = tf.gather_nd(theta, tf.stack([b, py+i, px+0], 3))
+        ti1 = tf.gather_nd(theta, tf.stack([b, py+i, px+1], 3))
+        ti2 = tf.gather_nd(theta, tf.stack([b, py+i, px+2], 3))
+        ti3 = tf.gather_nd(theta, tf.stack([b, py+i, px+3], 3))
+
+        ti = tf.stack([ti0, ti1, ti2, ti3], axis=-1)
         return ti
 
-
     def _piece_bsplines(self, u):
+        """
+        Computes the piece-wise Bspline functions for the given interpolation parameter.
+
+        This method calculates the piece-wise Bspline functions (U0, U1, U2, U3) for the given
+        interpolation parameter 'u'. These functions are used to perform interpolation during the
+        spatial transformation.
+
+        :Parameters:
+            - u (tf.Tensor): Interpolation parameter.
+
+        :Returns:
+            - U (tf.Tensor): Piece-wise Bspline functions.
+
+        :Note: This method is used internally by the SpatialTransformerBspline layer.
+        """
         u2 = u ** 2
         u3 = u ** 3
 
@@ -174,24 +282,25 @@ class SpatialTransformerBspline(tf.keras.layers.Layer):
         U2 = (-3*u3 + 3*u2 + 3*u + 1) / 6
         U3 = u3 / 6
 
-        U = tf.stack([U0,U1,U2,U3], axis=0)
+        U = tf.stack([U0, U1, U2, U3], axis=0)
         return U
-
 
     def _bilinear_sampler(self, img, x, y):
         """
-        Implementation of garden-variety bilinear sampler,
-        but samples for all batches and channels of the
-        input feature map.
+        Performs bilinear sampling on the input feature map based on the given coordinates.
 
-        Args:
-            img:  the input feature map, expects shape
-                of (B, H, W, C)
-            x, y: the co-ordinates returned by grid generator
-                in this context
+        This method implements bilinear sampling to interpolate pixel values from the input
+        feature map 'img' at the specified non-integer coordinates 'x' and 'y'.
 
-        Returns: output feature map after sampling, returns
-                in the shape (B, H, W, C)
+        :Parameters:
+            - img (tf.Tensor): Input feature map. Shape should be (B, H, W, C).
+            - x (tf.Tensor): X-coordinates for bilinear sampling.
+            - y (tf.Tensor): Y-coordinates for bilinear sampling.
+
+        :Returns:
+            - out (tf.Tensor): Output feature map after bilinear sampling. Shape is (B, H, W, C).
+
+        :Note: This method is used internally by the SpatialTransformerBspline layer.
         """
         B, H, W, C = img.shape
 
@@ -213,10 +322,10 @@ class SpatialTransformerBspline(tf.keras.layers.Layer):
         y1 = tf.clip_by_value(y1, zero, max_y)
 
         # Get corner pixel values
-        Ia = self._pixel_intensity(img, x0, y0) # bottom left ##
-        Ib = self._pixel_intensity(img, x0, y1) # top left ##
-        Ic = self._pixel_intensity(img, x1, y0) # bottom right ##
-        Id = self._pixel_intensity(img, x1, y1) # top right ##
+        Ia = self._pixel_intensity(img, x0, y0)  # bottom left ##
+        Ib = self._pixel_intensity(img, x0, y1)  # top left ##
+        Ic = self._pixel_intensity(img, x1, y0)  # bottom right ##
+        Id = self._pixel_intensity(img, x1, y1)  # top right ##
 
         # Define weights of corner coordinates using deltas
         # First recast corner coords as float32
@@ -244,22 +353,25 @@ class SpatialTransformerBspline(tf.keras.layers.Layer):
         out = tf.add_n([wa*Ia, wb*Ib, wc*Ic, wd*Id])
         return out
 
-
     def _pixel_intensity(self, img, x, y):
         """
-        Efficiently gather pixel intensities of transformed
-        co-ordinates post sampling.
-        Requires x and y to be of same shape
+        Efficiently gathers pixel intensities of transformed coordinates post-sampling.
 
-        Args:
-            img:  the input feature map; shape = (B, H, W, C)
-            x, y: co-ordinates (corner co-ordinates in bilinear
-                sampling)
+        Given the input feature map 'img' and transformed coordinates 'x' and 'y', this
+        method gathers pixel intensities using bilinear interpolation. The transformed
+        coordinates are expected to be of the same shape.
 
-        Returns: the pixel intensities in the same shape and
-                dimensions as x and y
+        :Parameters:
+            - img (tf.Tensor): Input feature map. Shape should be (B, H, W, C).
+            - x (tf.Tensor): X-coordinates for pixel intensity gathering.
+            - y (tf.Tensor): Y-coordinates for pixel intensity gathering.
+
+        :Returns:
+            - intensities (tf.Tensor): Pixel intensities at the specified coordinates.
+              Shape is the same as 'x' and 'y'.
+
+        :Note: This method is used internally by the SpatialTransformerBspline layer.
         """
-
         B, H, W, C = img.shape
         if B == None:
             B = 1
@@ -273,9 +385,26 @@ class SpatialTransformerBspline(tf.keras.layers.Layer):
         indices = tf.stack([b, y, x], axis=3)
         return tf.gather_nd(img, indices)
 
-
     def call(self, input_fmap, theta=None, B=None):
+        """
+        Applies the Spatial Transformer B-spline layer to the input feature map.
+
+        Given an input feature map 'input_fmap' and optional transformation parameters 'theta'
+        and batch size 'B', this method computes the spatial transformation using B-spline
+        interpolation and applies it to the input feature map.
+
+        :Parameters:
+            - input_fmap (tf.Tensor): Input feature map to be transformed. Shape should be (B, H, W, C).
+            - theta (tf.Tensor, optional): Transformation parameters. If None, identity transformation is used.
+              Shape should be (B, 2, ny, nx), where 'ny' and 'nx' are the number of control points along
+              the y and x dimensions of the B-spline grid, respectively.
+            - B (int, optional): Batch size. If None, the previously set batch size is used.
+
+        :Returns:
+            - transformed_fmap (tf.Tensor): Transformed feature map. Shape is the same as 'input_fmap'.
+
+        :Note: This method is used to apply the B-spline transformation to the input feature map.
+        """
         self.B = B
         out = self._transformer(input_fmap, theta)
         return out
-

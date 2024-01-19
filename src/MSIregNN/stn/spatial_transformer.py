@@ -3,7 +3,24 @@ import numpy as np
 
 
 def spatial_transformer(input_fmap, theta=None, out_dims=None, **kwargs):
+    """
+    Apply spatial transformation to the input feature map using the provided transformation parameters.
 
+    This function applies a spatial transformation to the input feature map using the provided transformation parameters.
+
+    :param input_fmap: Input feature map.
+    :type input_fmap: tf.Tensor
+    :param theta: Transformation parameters. If not provided, an identity transformation is assumed.
+    :type theta: tf.Tensor, optional
+    :param out_dims: Output dimensions of the transformed feature map (height, width). If not provided, output dimensions
+                     are the same as the input.
+    :type out_dims: tuple, optional
+    :param kwargs: Additional keyword arguments.
+    :type kwargs: dict
+
+    :return: Transformed feature map.
+    :rtype: tf.Tensor
+    """
     # Input dimensions
     DIM = len(input_fmap.shape)
 
@@ -42,6 +59,22 @@ def spatial_transformer(input_fmap, theta=None, out_dims=None, **kwargs):
 
 
 def _grid_generator(H, W, theta):
+    """
+    Generate a sampling grid for spatial transformation based on the input dimensions and transformation parameters.
+
+    This function generates a sampling grid for spatial transformation based on the input dimensions (height, width) and
+    transformation parameters (theta).
+
+    :param H: Height of the grid.
+    :type H: int
+    :param W: Width of the grid.
+    :type W: int
+    :param theta: Transformation parameters.
+    :type theta: tf.Tensor
+
+    :return: Batch of sampling grids.
+    :rtype: tf.Tensor
+    """
     batch_size = theta.shape[0]
 
     # Create meshgrid
@@ -71,6 +104,22 @@ def _grid_generator(H, W, theta):
 
 
 def _bilinear_sampler(img, x, y):
+    """
+    Perform bilinear sampling on the input image based on specified coordinates.
+
+    This function performs bilinear sampling on the input image using the specified x and y coordinates. It calculates
+    the intensity values by interpolating the pixel values at the corners of the specified coordinates.
+
+    :param img: Input image tensor with shape (batch_size, height, width, channels).
+    :type img: tf.Tensor
+    :param x: x-coordinates for sampling.
+    :type x: tf.Tensor
+    :param y: y-coordinates for sampling.
+    :type y: tf.Tensor
+
+    :return: Bilinear sampled output tensor.
+    :rtype: tf.Tensor
+    """
     H = tf.cast(tf.shape(img)[1], "float32")
     W = tf.cast(tf.shape(img)[2], "float32")
 
@@ -130,6 +179,22 @@ def _bilinear_sampler(img, x, y):
 
 
 def _pixel_intensity(img, x, y):
+    """
+    Retrieve pixel intensities from the input image at specified coordinates.
+
+    This function retrieves pixel intensities from the input image at the specified x and y coordinates. It uses
+    bilinear interpolation to calculate pixel values based on the surrounding four pixels.
+
+    :param img: Input image tensor with shape (batch_size, height, width, channels).
+    :type img: tf.Tensor
+    :param x: x-coordinates for pixel intensities.
+    :type x: tf.Tensor
+    :param y: y-coordinates for pixel intensities.
+    :type y: tf.Tensor
+
+    :return: Pixel intensities at specified coordinates.
+    :rtype: tf.Tensor
+    """
     shape = tf.shape(img)
     batch_size = shape[0]
     H = shape[1]
