@@ -1,4 +1,4 @@
 Usage
 =====
-.. automodule:: MSIregNN.api
+.. automodule:: msiregnn.api
     :members:

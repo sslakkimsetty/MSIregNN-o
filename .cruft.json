@@ -4,13 +4,13 @@
   "checkout": null,
   "context": {
     "cookiecutter": {
-      "package_name": "MSIregNN",
+      "package_name": "msiregnn",
       "package_name_stylized": "MSIregNN",
-      "short_description": "A neural network framework for coregistration of mass spectrometry images with other modalities",
+      "short_description": "A neural network based framework for coregistering mass spec images with other modalities",
       "author_name": "Sai Srikanth Lakkimsetty",
-      "author_email": "saislakkimsetty@gmail.comm",
+      "author_email": "saislakkimsetty@gmail.com",
       "github_organization_name": "sslakkimsetty",
-      "github_repository_name": "MSIregNN",
+      "github_repository_name": "msiregnn",
       "command_line_interface": true,
       "gitlab": false,
       "_template": "https://github.com/cthoyt/cookiecutter-snekpack"

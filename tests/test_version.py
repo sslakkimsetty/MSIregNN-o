@@ -1,9 +1,8 @@
-
 """Trivial version test."""
 
 import unittest
 
-from MSIregNN.version import get_version
+from msiregnn.version import get_version
 
 
 class TestVersion(unittest.TestCase):

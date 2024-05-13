@@ -1,4 +1,3 @@
-
-"""A neural network framework for coregistration of mass spectrometry images with other modalities."""
+"""A neural network based framework for coregistering mass spec images with other modalities."""
 
 from .api import *  # noqa

@@ -1,7 +1,6 @@
+"""Version information for :mod:`msiregnn`.
 
-"""Version information for :mod:`MSIregNN`.
-
-Run with ``python -m MSIregNN.version``
+Run with ``python -m msiregnn.version``
 """
 
 import os
@@ -17,7 +16,7 @@ VERSION = "0.0.1-dev"
 
 
 def get_git_hash() -> str:
-    """Get the :mod:`MSIregNN` git hash."""
+    """Get the :mod:`msiregnn` git hash."""
     with open(os.devnull, "w") as devnull:
         try:
             ret = check_output(
@@ -32,7 +31,7 @@ def get_git_hash() -> str:
 
 
 def get_version(with_git_hash: bool = False):
-    """Get the :mod:`MSIregNN` version string, including a git hash."""
+    """Get the :mod:`msiregnn` version string, including a git hash."""
     return f"{VERSION}-{get_git_hash()}" if with_git_hash else VERSION
 
 

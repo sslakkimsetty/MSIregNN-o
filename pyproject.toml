@@ -22,7 +22,7 @@ max-line-length = 120
 # Coverage, see https://coverage.readthedocs.io/en/latest/config.html
 [tool.coverage.run]
 branch = true
-source = "MSIregNN"
+source = ["msiregnn"]
 omit = [
     "tests/*",
     "docs/*",
@@ -30,8 +30,8 @@ omit = [
 
 [tool.coverage.paths]
 source = [
-    "src/MSIregNN",
-    ".tox/*/lib/python*/site-packages/MSIregNN",
+    "src/msiregnn",
+    ".tox/*/lib/python*/site-packages/msiregnn",
 ]
 
 [tool.coverage.report]

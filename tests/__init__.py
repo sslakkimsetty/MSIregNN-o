@@ -1,2 +1,1 @@
-
-"""Tests for :mod:`MSIregNN`."""
+"""Tests for :mod:`msiregnn`."""

@@ -1,6 +1,6 @@
 <!--
 <p align="center">
-  <img src="https://github.com/sslakkimsetty/MSIregNN/raw/main/docs/source/logo.png" height="150">
+  <img src="https://github.com/sslakkimsetty/msiregnn/raw/main/docs/source/logo.png" height="150">
 </p>
 -->
 
@@ -9,27 +9,27 @@
 </h1>
 
 <p align="center">
-    <a href="https://github.com/sslakkimsetty/MSIregNN/actions/workflows/tests.yml">
-        <img alt="Tests" src="https://github.com/sslakkimsetty/MSIregNN/actions/workflows/tests.yml/badge.svg" /></a>
-    <a href="https://pypi.org/project/MSIregNN">
-        <img alt="PyPI" src="https://img.shields.io/pypi/v/MSIregNN" /></a>
-    <a href="https://pypi.org/project/MSIregNN">
-        <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/MSIregNN" /></a>
-    <a href="https://github.com/sslakkimsetty/MSIregNN/blob/main/LICENSE">
-        <img alt="PyPI - License" src="https://img.shields.io/pypi/l/MSIregNN" /></a>
-    <a href='https://MSIregNN.readthedocs.io/en/latest/?badge=latest'>
-        <img src='https://readthedocs.org/projects/MSIregNN/badge/?version=latest' alt='Documentation Status' /></a>
-    <a href="https://codecov.io/gh/sslakkimsetty/MSIregNN/branch/main">
-        <img src="https://codecov.io/gh/sslakkimsetty/MSIregNN/branch/main/graph/badge.svg" alt="Codecov status" /></a>  
+    <a href="https://github.com/sslakkimsetty/msiregnn/actions/workflows/tests.yml">
+        <img alt="Tests" src="https://github.com/sslakkimsetty/msiregnn/actions/workflows/tests.yml/badge.svg" /></a>
+    <a href="https://pypi.org/project/msiregnn">
+        <img alt="PyPI" src="https://img.shields.io/pypi/v/msiregnn" /></a>
+    <a href="https://pypi.org/project/msiregnn">
+        <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/msiregnn" /></a>
+    <a href="https://github.com/sslakkimsetty/msiregnn/blob/main/LICENSE">
+        <img alt="PyPI - License" src="https://img.shields.io/pypi/l/msiregnn" /></a>
+    <a href='https://msiregnn.readthedocs.io/en/latest/?badge=latest'>
+        <img src='https://readthedocs.org/projects/msiregnn/badge/?version=latest' alt='Documentation Status' /></a>
+    <a href="https://codecov.io/gh/sslakkimsetty/msiregnn/branch/main">
+        <img src="https://codecov.io/gh/sslakkimsetty/msiregnn/branch/main/graph/badge.svg" alt="Codecov status" /></a>  
     <a href="https://github.com/cthoyt/cookiecutter-python-package">
         <img alt="Cookiecutter template from @cthoyt" src="https://img.shields.io/badge/Cookiecutter-snekpack-blue" /></a>
     <a href='https://github.com/psf/black'>
         <img src='https://img.shields.io/badge/code%20style-black-000000.svg' alt='Code style: black' /></a>
-    <a href="https://github.com/sslakkimsetty/MSIregNN/blob/main/.github/CODE_OF_CONDUCT.md">
+    <a href="https://github.com/sslakkimsetty/msiregnn/blob/main/.github/CODE_OF_CONDUCT.md">
         <img src="https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg" alt="Contributor Covenant"/></a>
 </p>
 
-A neural network framework for coregistration of mass spectrometry images with other modalities
+A neural network based framework for coregistering mass spec images with other modalities
 
 ## 💪 Getting Started
 
@@ -38,11 +38,11 @@ A neural network framework for coregistration of mass spectrometry images with o
 
 ### Command Line Interface
 
-The MSIregNN command line tool is automatically installed. It can
+The msiregnn command line tool is automatically installed. It can
 be used from the shell with the `--help` flag to show all subcommands:
 
 ```shell
-MSIregNN --help
+msiregnn --help
 ```
 
 > TODO show the most useful thing the CLI does! The CLI will have documentation auto-generated
@@ -52,23 +52,23 @@ MSIregNN --help
 
 <!-- Uncomment this section after your first ``tox -e finish``
 The most recent release can be installed from
-[PyPI](https://pypi.org/project/MSIregNN/) with:
+[PyPI](https://pypi.org/project/msiregnn/) with:
 
 ```shell
-pip install MSIregNN
+pip install msiregnn
 ```
 -->
 
 The most recent code and data can be installed directly from GitHub with:
 
 ```shell
-pip install git+https://github.com/sslakkimsetty/MSIregNN.git
+pip install git+https://github.com/sslakkimsetty/msiregnn.git
 ```
 
 ## 👐 Contributing
 
 Contributions, whether filing an issue, making a pull request, or forking, are appreciated. See
-[CONTRIBUTING.md](https://github.com/sslakkimsetty/MSIregNN/blob/master/.github/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/sslakkimsetty/msiregnn/blob/master/.github/CONTRIBUTING.md)
 for more information on getting involved.
 
 ## 👋 Attribution
@@ -120,8 +120,8 @@ The final section of the README is for if you want to get involved by making a c
 To install in development mode, use the following:
 
 ```bash
-git clone git+https://github.com/sslakkimsetty/MSIregNN.git
-cd MSIregNN
+git clone git+https://github.com/sslakkimsetty/msiregnn.git
+cd msiregnn
 pip install -e .
 ```
 
@@ -149,15 +149,15 @@ tox
 ```
 
 Additionally, these tests are automatically re-run with each commit in a
-[GitHub Action](https://github.com/sslakkimsetty/MSIregNN/actions?query=workflow%3ATests).
+[GitHub Action](https://github.com/sslakkimsetty/msiregnn/actions?query=workflow%3ATests).
 
 ### 📖 Building the Documentation
 
 The documentation can be built locally using the following:
 
 ```shell
-git clone git+https://github.com/sslakkimsetty/MSIregNN.git
-cd MSIregNN
+git clone git+https://github.com/sslakkimsetty/msiregnn.git
+cd msiregnn
 tox -e docs
 open docs/build/html/index.html
 ``` 
@@ -198,7 +198,7 @@ but also that [ReadTheDocs can build it too](https://docs.readthedocs.io/en/stab
    a new repository, you'll have to come back to this
 
 After these steps, you're ready to go! After you make "release" on GitHub (steps for this are below), you can navigate
-to https://zenodo.org/account/settings/github/repository/sslakkimsetty/MSIregNN
+to https://zenodo.org/account/settings/github/repository/sslakkimsetty/msiregnn
 to see the DOI for the release and link to the Zenodo record for it.
 
 #### Registering with the Python Package Index (PyPI)
@@ -254,7 +254,7 @@ tox -e finish
 This script does the following:
 
 1. Uses [Bump2Version](https://github.com/c4urself/bump2version) to switch the version number in
-   the `setup.cfg`, `CITATION.cff`, `src/MSIregNN/version.py`,
+   the `setup.cfg`, `CITATION.cff`, `src/msiregnn/version.py`,
    and [`docs/source/conf.py`](docs/source/conf.py) to not have the `-dev` suffix
 2. Packages the code in both a tar archive and a wheel using [`build`](https://github.com/pypa/build)
 3. Uploads to PyPI using [`twine`](https://github.com/pypa/twine).
@@ -265,7 +265,7 @@ This script does the following:
 #### Releasing on GitHub
 
 1. Navigate
-   to https://github.com/sslakkimsetty/MSIregNN/releases/new
+   to https://github.com/sslakkimsetty/msiregnn/releases/new
    to draft a new release
 2. Click the "Choose a Tag" dropdown and select the tag corresponding to the release you just made
 3. Click the "Generate Release Notes" button to get a quick outline of recent changes. Modify the title and description

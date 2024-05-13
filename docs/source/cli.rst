@@ -1,8 +1,8 @@
 Command Line Interface
 ======================
-MSIregNN automatically installs the command :code:`MSIregNN`. See
-:code:`MSIregNN --help` for usage details.
+msiregnn automatically installs the command :code:`msiregnn`. See
+:code:`msiregnn --help` for usage details.
 
-.. click:: MSIregNN.cli:main
-   :prog: MSIregNN
+.. click:: msiregnn.cli:main
+   :prog: msiregnn
    :show-nested:
