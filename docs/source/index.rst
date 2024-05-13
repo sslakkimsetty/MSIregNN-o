@@ -10,10 +10,11 @@ It comes with the following:
 - Standard `src/` layout
 - Declarative setup with `setup.cfg` and `pyproject.toml`
 - Reproducible tests with `pytest` and `tox`
+- A command line interface with `click`
 - A vanity CLI via python entrypoints
 - Version management with `bumpversion`
 - Documentation build with `sphinx`
-- Testing of code quality with `flake8` in `tox`
+- Testing of code quality with `ruff` in `tox`
 - Testing of documentation coverage with `docstr-coverage` in `tox`
 - Testing of documentation format and build in `tox`
 - Testing of package metadata completeness with `pyroma` in `tox`
@@ -38,7 +39,7 @@ Table of Contents
 
    installation
    usage
-
+   cli
 
 Indices and Tables
 ------------------

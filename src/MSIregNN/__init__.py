@@ -1,14 +1,4 @@
-# -*- coding: utf-8 -*-
 
-"""A python package to co-register mass spectrometry images (MSI)."""
+"""A neural network framework for coregistration of mass spectrometry images with other modalities."""
 
-from . import mi, stn, stn_affine, stn_bspline, DLIR, msiData
-
-__all__ = ["mi", "stn", "stn_affine", "stn_bspline", "DLIR", "msiData"]
-
-# from .mi import *
-# from .stn import *
-# from .stn_affine import *
-# from .stn_bspline import *
-# from .DLIR import *
-from .msiData import *
+from .api import *  # noqa
